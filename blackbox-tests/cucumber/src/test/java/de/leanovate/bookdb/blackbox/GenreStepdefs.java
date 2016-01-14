@@ -14,9 +14,9 @@ public class GenreStepdefs {
     private final TestConfig config;
     private final TestHttpClient client;
 
-    public GenreStepdefs(TestConfig config) {
+    public GenreStepdefs(TestConfig config, TestHttpClient client) {
         this.config = config;
-        this.client = config.client;
+        this.client = client;
     }
 
 

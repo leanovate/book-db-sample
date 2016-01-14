@@ -5,6 +5,7 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "html:target/cucumber"}, tags = {"~@ignore"})
+@CucumberOptions(plugin = {"pretty", "html:target/cucumber"}, tags = {"~@ignore"},
+        glue = {"classpath:de/leanovate/bookdb", "classpath:de/leanovate/cucumber"})
 public class RunCukesTest {
 }
