@@ -1,9 +1,9 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-
 # Home page
-GET     /                           controllers.Application.index
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /v1/genres                  @controllers.GenresController.listAll(offset: Int ?= 0, limit: Int ?= 20)
+POST    /v1/genres                  @controllers.GenresController.create
+GET     /v1/genres/:name            @controllers.GenresController.findById(name:String)
+DELETE  /v1/genres/:name            @controllers.GenresController.delete(name:String)

@@ -1,0 +1,89 @@
+swagger: '2.0'
+info:
+  title: Book database API
+  description: Manga all your books
+  version: 1.0.0
+host: api.books.leanovate.de
+schemes:
+  - http
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /genres:
+    get:
+      summary: Genres
+      description: |
+        Manage all book genres
+      parameters:
+        - name: offset
+          in: query
+          description: "Offset for paging (default: 0)"
+          required: false
+          type: number
+          format: int32
+        - name: limit
+          in: query
+          description: "Limit for paging (default: 20)"
+          required: false
+          type: number
+          format: int32
+      tags:
+        - Genre
+      responses:
+        '200':
+          description: A page of genres
+          schema:
+            $ref: '#/definitions/GenresPage'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Genre:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: "Name of the genre"
+      description:
+        type: string
+        description: "Description of the genre."
+  GenresPage:
+    type: object
+    required:
+      - offset
+      - limit
+      - total
+      - entries
+    properties:
+      offset:
+        type: number
+        format: int32
+      limit:
+        type: number
+        format: int32
+      total:
+        type: number
+        format: int32
+      entries:
+        type: array
+        items:
+          $ref: '#/definitions/Genre'
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          type: string
