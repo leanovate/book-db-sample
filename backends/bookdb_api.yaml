@@ -85,6 +85,64 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /books:
+    get:
+      summary: Get all books
+      tags:
+        - Book
+      responses:
+        '200':
+          description: A page of genres
+          schema:
+            $ref: '#/definitions/BooksPage'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a book
+      tags:
+        - Book
+      responses:
+        '201':
+          description: Author successfully created
+          headers:
+            Location:
+              type: string
+              format: uri
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /books/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: "Short name of the genre"
+        required: true
+        type: string
+        format: uuid
+    get:
+      summary: Get a specific book
+      responses:
+        '200':
+          description: The book
+          schema:
+            $ref: '#/definitions/Book'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete the book
+      responses:
+        '204':
+          description: Successfully deleted the book
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
   /genres:
     get:
       summary: Get all genres
@@ -199,6 +257,40 @@ definitions:
             type: array
             items:
               $ref: '#/definitions/Author'
+  Book:
+    type: object
+    required:
+      - title
+      - authors
+    properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
+      genre:
+        type: string
+      isbn:
+        type: string
+        pattern: '^(97(8|9))?\d{9}(\d|X)$'
+      title:
+        type: string
+      summary:
+        type: string
+      authors:
+        type: array
+        items:
+          $ref: '#/definitions/Author'
+  BooksPage:
+    allOf:
+      - $ref: "#/definitions/AbstractPage"
+      - type: object
+        required:
+          - entries
+        properties:
+          entries:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
   Genre:
     type: object
     required:
