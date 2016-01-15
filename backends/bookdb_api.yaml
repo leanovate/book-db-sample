@@ -10,9 +10,84 @@ basePath: /v1
 produces:
   - application/json
 paths:
+  /authors:
+    get:
+      summary: Get all authors
+      tags:
+        - Author
+      parameters:
+        - name: offset
+          in: query
+          description: "Offset for paging (default: 0)"
+          required: false
+          type: number
+          format: int32
+        - name: limit
+          in: query
+          description: "Limit for paging (default: 20)"
+          required: false
+          type: number
+          format: int32
+      responses:
+        '200':
+          description: A page of genres
+          schema:
+            $ref: '#/definitions/AuthorsPage'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a new author
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Author"
+      responses:
+        '201':
+          description: Author successfully created
+          headers:
+            Location:
+              type: string
+              format: uri
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /author/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: "Short name of the genre"
+        required: true
+        type: string
+        format: uuid
+    get:
+      summary: Get a specific author
+      responses:
+        '200':
+          description: The author
+          schema:
+            $ref: '#/definitions/Author'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete the author
+      responses:
+        '204':
+          description: Successfully deleted the author
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
   /genres:
     get:
-      summary: Genres
+      summary: Get all genres
       description: |
         Manage all book genres
       parameters:
@@ -39,7 +114,91 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+    post:
+      summary: Create a new genre
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Genre"
+      responses:
+        '201':
+          description: Genre successfully created
+          headers:
+            Location:
+              type: string
+              format: uri
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /genre/{name}:
+    parameters:
+      - name: name
+        in: path
+        description: "Short name of the genre"
+        required: true
+        type: string
+    get:
+      summary: Get a specific genre
+      responses:
+        '200':
+          description: The genre
+          schema:
+            $ref: '#/definitions/Genre'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete the genre
+      responses:
+        '204':
+          description: Successfully deleted the genre
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
+  AbstractPage:
+    type: object
+    required:
+      - offset
+      - limit
+      - total
+    properties:
+      offset:
+        type: number
+        format: int32
+      limit:
+        type: number
+        format: int32
+      total:
+        type: number
+        format: int32
+  Author:
+    type: object
+    required:
+      - name
+    properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
+      name:
+        type: string
+  AuthorsPage:
+    allOf:
+      - $ref: "#/definitions/AbstractPage"
+      - type: object
+        required:
+          - entries
+        properties:
+          entries:
+            type: array
+            items:
+              $ref: '#/definitions/Author'
   Genre:
     type: object
     required:
@@ -52,26 +211,16 @@ definitions:
         type: string
         description: "Description of the genre."
   GenresPage:
-    type: object
-    required:
-      - offset
-      - limit
-      - total
-      - entries
-    properties:
-      offset:
-        type: number
-        format: int32
-      limit:
-        type: number
-        format: int32
-      total:
-        type: number
-        format: int32
-      entries:
-        type: array
-        items:
-          $ref: '#/definitions/Genre'
+    allOf:
+      - $ref: "#/definitions/AbstractPage"
+      - type: object
+        required:
+          - entries
+        properties:
+          entries:
+            type: array
+            items:
+              $ref: '#/definitions/Genre'
   Error:
     type: object
     required:
