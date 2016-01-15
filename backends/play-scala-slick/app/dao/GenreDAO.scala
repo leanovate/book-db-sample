@@ -1,14 +1,15 @@
 package dao
 
+import javax.inject.Inject
+
 import models.{Genre, Page}
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class GenreDAO extends HasDatabaseConfig[JdbcProfile] {
+class GenreDAO @Inject()()(implicit executionContext: ExecutionContext) extends HasDatabaseConfig[JdbcProfile] {
   override protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   import driver.api._
@@ -30,7 +31,7 @@ class GenreDAO extends HasDatabaseConfig[JdbcProfile] {
   private class GenreTable(tag: Tag) extends Table[Genre](tag, "GENRE") {
     def name = column[String]("NAME", O.PrimaryKey)
 
-    def description = column[String]("DESCRIPTION")
+    def description = column[String]("DESCRIPTION").?
 
     def * = (name, description) <>((Genre.apply _).tupled, Genre.unapply _)
   }

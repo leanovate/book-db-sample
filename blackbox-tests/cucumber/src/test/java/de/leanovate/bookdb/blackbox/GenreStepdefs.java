@@ -56,5 +56,4 @@ public class GenreStepdefs {
 
         assertThat(response).isNoContent();
     }
-
 }

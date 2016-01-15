@@ -1,5 +1,5 @@
 Feature: Genres
-  Scenario: Add new genres
+  Scenario: Add and remove genre
     Given: Running book database
     When A genre "test_genre" is added
     Then The genre "test_genre" exists

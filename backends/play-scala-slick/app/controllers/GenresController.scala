@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 import dao.GenreDAO
 import models.{ErrorMessage, Genre}
+import play.api.http.HeaderNames
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc.{Action, Controller}
 
@@ -19,10 +20,13 @@ class GenresController @Inject()(genreDao: GenreDAO)(implicit executionContext: 
   }
 
   def create = Action.async(parse.json) {
-    request =>
+    implicit request =>
       request.body.validate[Genre] match {
         case JsSuccess(genre, _) =>
-          genreDao.insert(genre).map(_ => Created)
+          genreDao.insert(genre).map {
+            _ =>
+              Created.withHeaders(HeaderNames.LOCATION -> routes.GenresController.findById(genre.name).absoluteURL)
+          }
         case JsError(errors) =>
           Future.successful(BadRequest(Json.toJson(ErrorMessage(400, "Invalid json").withJsErrors(errors))))
       }

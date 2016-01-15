@@ -7,3 +7,6 @@ GET     /v1/genres                  @controllers.GenresController.listAll(offset
 POST    /v1/genres                  @controllers.GenresController.create
 GET     /v1/genres/:name            @controllers.GenresController.findById(name:String)
 DELETE  /v1/genres/:name            @controllers.GenresController.delete(name:String)
+
+POST    /v1/authors                 @controllers.AuthorsController.create
+GET     /v1/authors/:id             @controllers.AuthorsController.findById(id:java.lang.UUID)

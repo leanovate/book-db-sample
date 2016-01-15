@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 
 case class Genre(
                   name: String,
-                  description: String
+                  description: Option[String]
                 )
 
 object Genre {
