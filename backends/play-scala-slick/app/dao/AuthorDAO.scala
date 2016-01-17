@@ -23,11 +23,11 @@ class AuthorDAO @Inject()()(implicit executionContext: ExecutionContext) extends
       authors <- db.run(Authors.sortBy(_.name).drop(offset).take(limit).result)
     } yield Page(offset, limit, total, authors)
 
-  def findById(id: UUID): Future[Option[Author]] = db.run(Authors.filter(_.id === id).result.headOption)
+  def findById(id: UUID): Future[Option[Author]] = db.run(Authors.filter(_.id === id.bind).result.headOption)
 
   def insert(author: Author): Future[Unit] = db.run(Authors += author).map(_ => ())
 
-  def delete(id: UUID): Future[Unit] = db.run(Authors.filter(_.id === id).delete).map(_ => ())
+  def delete(id: UUID): Future[Unit] = db.run(Authors.filter(_.id === id.bind).delete).map(_ => ())
 
   private class AuthorTable(tag: Tag) extends Table[Author](tag, "AUTHOR") {
     def id = column[UUID]("ID", O.PrimaryKey)
