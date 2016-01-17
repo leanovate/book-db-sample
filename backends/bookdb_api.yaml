@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Book database API
-  description: Manga all your books
+  description: Manage all your books
   version: 1.0.0
 host: api.books.leanovate.de
 schemes:
@@ -257,11 +257,10 @@ definitions:
             type: array
             items:
               $ref: '#/definitions/Author'
-  Book:
+  BookPageEntry:
     type: object
     required:
       - title
-      - authors
     properties:
       id:
         type: string
@@ -269,17 +268,24 @@ definitions:
         readOnly: true
       genre:
         type: string
+      title:
+        type: string
       isbn:
         type: string
         pattern: '^(97(8|9))?\d{9}(\d|X)$'
-      title:
-        type: string
-      summary:
-        type: string
-      authors:
-        type: array
-        items:
-          $ref: '#/definitions/Author'
+  Book:
+    allOf:
+      - $ref: '#/definitions/BookPageEntry'
+      - type: object
+        required:
+          - authors
+        properties:
+          summary:
+            type: string
+          authors:
+            type: array
+            items:
+              $ref: '#/definitions/Author'
   BooksPage:
     allOf:
       - $ref: "#/definitions/AbstractPage"
@@ -290,7 +296,7 @@ definitions:
           entries:
             type: array
             items:
-              $ref: '#/definitions/Book'
+              $ref: '#/definitions/BookPageEntry'
   Genre:
     type: object
     required:

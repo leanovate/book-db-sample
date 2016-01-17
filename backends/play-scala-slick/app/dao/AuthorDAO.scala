@@ -15,13 +15,15 @@ class AuthorDAO @Inject()()(implicit executionContext: ExecutionContext) extends
 
   import driver.api._
 
-  private val Authors = TableQuery[AuthorTable]
+  val Authors = TableQuery[AuthorTable]
 
   def all(offset: Int, limit: Int): Future[Page[Author]] =
-    for {
-      total <- db.run(Authors.length.result)
-      authors <- db.run(Authors.sortBy(_.name).drop(offset).take(limit).result)
-    } yield Page(offset, limit, total, authors)
+    db.run(
+      for {
+        total <- Authors.length.result
+        authors <- Authors.sortBy(_.name).drop(offset).take(limit).result
+      } yield Page(offset, limit, total, authors)
+    )
 
   def findById(id: UUID): Future[Option[Author]] = db.run(Authors.filter(_.id === id.bind).result.headOption)
 
@@ -29,7 +31,7 @@ class AuthorDAO @Inject()()(implicit executionContext: ExecutionContext) extends
 
   def delete(id: UUID): Future[Unit] = db.run(Authors.filter(_.id === id.bind).delete).map(_ => ())
 
-  private class AuthorTable(tag: Tag) extends Table[Author](tag, "AUTHOR") {
+  class AuthorTable(tag: Tag) extends Table[Author](tag, "AUTHOR") {
     def id = column[UUID]("ID", O.PrimaryKey)
 
     def name = column[String]("NAME")

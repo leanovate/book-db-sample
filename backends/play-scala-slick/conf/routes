@@ -13,3 +13,6 @@ POST    /v1/authors                 @controllers.AuthorsController.create
 GET     /v1/authors/:id             @controllers.AuthorsController.findById(id:java.util.UUID)
 DELETE  /v1/authors/:id             @controllers.AuthorsController.delete(id:java.util.UUID)
 
+GET     /v1/books                   @controllers.BooksController.listAll(offset: Int ?= 0, limit: Int ?= 20)
+POST    /v1/books                   @controllers.BooksController.create
+GET     /v1/books/:id               @controllers.BooksController.findById(id:java.util.UUID)
