@@ -10,6 +10,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
   "com.h2database" % "h2" % "1.4.187",
+  "de.leanovate.swaggercheck" %% "swagger-check-core" % "0.99.1" % Test,
+  "org.specs2" %% "specs2-scalacheck" % "3.6" % Test,
   specs2 % Test
 )
 
