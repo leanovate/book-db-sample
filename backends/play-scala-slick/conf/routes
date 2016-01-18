@@ -16,3 +16,4 @@ DELETE  /v1/authors/:id             @controllers.AuthorsController.delete(id:jav
 GET     /v1/books                   @controllers.BooksController.listAll(offset: Int ?= 0, limit: Int ?= 20)
 POST    /v1/books                   @controllers.BooksController.create
 GET     /v1/books/:id               @controllers.BooksController.findById(id:java.util.UUID)
+DELETE  /v1/books/:id               @controllers.BooksController.delete(id:java.util.UUID)

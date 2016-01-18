@@ -1,6 +1,6 @@
-Feature: Genres
+Feature: Manage genres
   Scenario: Add and remove genre
-    Given: Running book database
+    Given: A running book database
     When A genre "test_genre" is added
     Then The genre "test_genre" exists
     When The genre "test_genre" is deleted

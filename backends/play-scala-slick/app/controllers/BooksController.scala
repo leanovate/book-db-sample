@@ -3,17 +3,17 @@ package controllers
 import java.util.UUID
 import javax.inject.Inject
 
-import dao.{BooksDAO, GenreDAO, AuthorDAO}
-import models.{Book, ErrorMessage, Author}
+import dao.{AuthorDAO, BooksDAO, GenreDAO}
+import models.{Book, ErrorMessage}
 import play.api.http.HeaderNames
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc.{Action, Controller}
 
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
 
 class BooksController @Inject()(authorDao: AuthorDAO,
                                 genresDao: GenreDAO,
-                                booksDao: BooksDAO)(implicit executionContext: ExecutionContext) extends Controller{
+                                booksDao: BooksDAO)(implicit executionContext: ExecutionContext) extends Controller {
   def listAll(offset: Int, limit: Int) = Action.async {
     request =>
       booksDao.all(offset, limit).map {
@@ -42,4 +42,10 @@ class BooksController @Inject()(authorDao: AuthorDAO,
       }
   }
 
+  def delete(id: UUID) = Action.async {
+    request =>
+      booksDao.delete(id).map {
+        _ => NoContent
+      }
+  }
 }

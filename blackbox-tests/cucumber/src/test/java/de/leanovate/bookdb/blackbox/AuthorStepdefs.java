@@ -37,15 +37,15 @@ public class AuthorStepdefs {
         authorUri = Optional.of(response.getFirstHeader(HttpHeaders.LOCATION).getValue());
     }
 
-    @Then("^Created author can be opened$")
-    public void createdAuthorCanBeOpened() throws Throwable {
+    @Then("^The created author does exists$")
+    public void theCreatedAuthorDoesExists() throws Throwable {
         Request request = Request.Get(authorUri.orElseThrow(() -> new RuntimeException("Author uri not set")));
 
         author = Optional.of(client.executeJson(request, Author.class));
     }
 
-    @Then("^The auther has the name \"([^\"]*)\"$")
-    public void theAutherHasTheName(String authorName) throws Throwable {
+    @Then("^The author has the name \"([^\"]*)\"$")
+    public void theAuthorHasTheName(String authorName) throws Throwable {
         Author actual = author.orElseThrow(() -> new RuntimeException("Author not set"));
 
         assertThat(actual.name).isEqualTo(authorName);

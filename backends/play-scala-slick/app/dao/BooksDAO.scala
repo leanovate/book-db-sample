@@ -41,10 +41,19 @@ class BooksDAO @Inject()(authorDAO: AuthorDAO)(implicit executionContext: Execut
   def insert(book: Book): Future[Unit] =
     db.run(
       for {
-        bookId <- Books returning Books.map(_.id) += BookRow(book.id, book.title, book.summary, book.isbn, book.genre)
-        _ <- BookAuthors ++= book.authors.map(author => BookAuthorRow(bookId, author.id))
+        _ <- Books += BookRow(book.id, book.title, book.summary, book.isbn, book.genre)
+        _ <- BookAuthors ++= book.authors.map(author => BookAuthorRow(book.id, author.id))
       } yield ()
     )
+
+  def delete(id: UUID): Future[Unit] =
+    db.run(
+      for {
+        _ <- BookAuthors.filter(_.bookId === id.bind).delete
+        _ <- Books.filter(_.id === id.bind).delete
+      } yield ()
+    )
+
 
   case class BookRow(
                       id: UUID,
