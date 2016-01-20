@@ -7,7 +7,8 @@ trait Arbitraries {
   implicit val arbitraryAuthor = Arbitrary[Author](for {
     id <- Gen.uuid
     name <- Arbitrary.arbitrary[String]
-  } yield Author(id, name))
+    description <- Arbitrary.arbitrary[Option[String]]
+  } yield Author(id, name, description))
 
   implicit val arbitraryGenre = Arbitrary[Genre](for {
     name <- Gen.identifier
@@ -19,5 +20,4 @@ trait Arbitraries {
     message <- Arbitrary.arbitrary[String]
     details <- Gen.option(Arbitrary.arbitrary[Seq[String]])
   } yield ErrorMessage(code, message))
-
 }

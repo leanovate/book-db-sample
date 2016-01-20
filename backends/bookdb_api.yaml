@@ -246,6 +246,8 @@ definitions:
         readOnly: true
       name:
         type: string
+      description:
+        type: string
   AuthorsPage:
     allOf:
       - $ref: "#/definitions/AbstractPage"

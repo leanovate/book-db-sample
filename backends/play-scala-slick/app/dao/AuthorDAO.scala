@@ -36,7 +36,9 @@ class AuthorDAO @Inject()()(implicit executionContext: ExecutionContext) extends
 
     def name = column[String]("NAME")
 
-    def * = (id, name) <>((Author.apply _).tupled, Author.unapply _)
+    def description = column[String]("DESCRIPTION").?
+
+    def * = (id, name, description) <>((Author.apply _).tupled, Author.unapply _)
   }
 
 }

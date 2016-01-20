@@ -6,7 +6,8 @@ import play.api.libs.json._
 
 case class Author(
                    id: UUID,
-                   name: String
+                   name: String,
+                   description: Option[String]
                  )
 
 object Author {
@@ -14,6 +15,7 @@ object Author {
 
   implicit val jsonReads : Reads[Author] =
     ((JsPath \ "id").readNullable[UUID].map(_.getOrElse(UUID.randomUUID())) and
-      (JsPath \ "name").read[String])(Author.apply _)
+      (JsPath \ "name").read[String] and
+      (JsPath \ "description").readNullable[String])(Author.apply _)
 
 }
