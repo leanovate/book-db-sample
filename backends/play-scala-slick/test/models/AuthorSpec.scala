@@ -30,6 +30,5 @@ class AuthorSpec extends Specification with ScalaCheck with MustMatchers with Ar
           verifier.verify(Json.stringify(Json.toJson(author))) must be equalTo ValidationResult.success
       }
     }
-
   }
 }

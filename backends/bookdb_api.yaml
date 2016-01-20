@@ -191,7 +191,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /genre/{name}:
+  /genres/{name}:
     parameters:
       - name: name
         in: path
