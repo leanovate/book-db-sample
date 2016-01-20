@@ -11,10 +11,12 @@ case class Page[T](
                   )
 
 object Page {
-  implicit def jsonWrites[T](implicit entriesWrites: Writes[T]) : Writes[Page[T]] = (
+  implicit def jsonWrites[T](implicit entriesWrites: Writes[T]): Writes[Page[T]] = (
     (JsPath \ "offset").write[Int] and
       (JsPath \ "limit").write[Int] and
       (JsPath \ "total").write[Int] and
       (JsPath \ "entries").write[Seq[T]]
-    )(unlift(Page.unapply[T]))
+    ) (unlift(Page.unapply[T]))
+
+  def empty[T]: Page[T] = Page[T](0, 0, 0, Seq.empty[T])
 }
