@@ -1,6 +1,6 @@
 package support
 
-import models.{Page, Genre, Author, ErrorMessage}
+import models._
 import org.scalacheck.{Arbitrary, Gen}
 
 trait Arbitraries {
@@ -29,9 +29,16 @@ trait Arbitraries {
     entries <- Gen.listOfN(limit, Arbitrary.arbitrary[Genre])
   } yield Page[Genre](offset, limit, total, entries))
 
+  implicit val arbitraryErrorDetail = Arbitrary[ErrorDetail](for {
+    in <- Gen.option(Gen.identifier)
+    position <- Gen.option(Gen.identifier)
+    message <- Arbitrary.arbitrary[String]
+  } yield ErrorDetail(in, position, message)
+
+  )
   implicit val arbitraryErrorMessage = Arbitrary[ErrorMessage](for {
     code <- Gen.choose(100, 599)
     message <- Arbitrary.arbitrary[String]
-    details <- Gen.option(Arbitrary.arbitrary[Seq[String]])
-  } yield ErrorMessage(code, message))
+    details <- Gen.option(Arbitrary.arbitrary[Seq[ErrorDetail]])
+  } yield ErrorMessage(code, message, details))
 }

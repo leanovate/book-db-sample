@@ -335,4 +335,15 @@ definitions:
       details:
         type: array
         items:
-          type: string
+          $ref: "#/definitions/ErrorDetail"
+  ErrorDetail:
+    type: object
+    required:
+      - message
+    properties:
+      in:
+        type: string
+      position:
+        type: string
+      message:
+        type: string

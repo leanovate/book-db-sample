@@ -18,7 +18,7 @@
         <dependency>
             <groupId>de.leanovate.cucumber</groupId>
             <artifactId>rest-helper</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.9</version>
             <scope>test</scope>
         </dependency>
 
